@@ -62,7 +62,7 @@
             <Font size="19.0" />
          </font>
       </Label>
-      <ListView fx:id="ProcessList" layoutX="33.0" layoutY="348.0" prefHeight="200.0" prefWidth="200.0" />
+      <ListView fx:id="ProcessList" layoutX="33.0" layoutY="396.0" prefHeight="152.0" prefWidth="200.0" />
       <Label layoutX="33.0" layoutY="294.0" text="Num of Processes:" />
       <Label layoutX="33.0" layoutY="316.0" text="Starting Position:" />
       <Label fx:id="StartingPosition" layoutX="140.0" layoutY="316.0" text="1" />
