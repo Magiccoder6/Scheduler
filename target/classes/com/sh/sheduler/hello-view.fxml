@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="666.0" prefWidth="1144.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.sh.sheduler.HelloController">
+   <children>
+      <Slider fx:id="ProcessSelector" blockIncrement="1.0" layoutX="41.0" layoutY="184.0" majorTickUnit="1.0" max="30.0" min="10.0" minorTickCount="1" onMouseReleased="#updateProcess" prefHeight="32.0" prefWidth="327.0" showTickLabels="true" snapToTicks="true" value="10.0" />
+      <Label layoutX="41.0" layoutY="147.0" text="Select the number of processes" />
+      <Label fx:id="ProcessNum" layoutX="140.0" layoutY="294.0" text="10" />
+      <Label layoutX="495.0" layoutY="147.0" text="Select the starting position" />
+      <Label layoutX="41.0" layoutY="83.0" text="Integers">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Label fx:id="Numbers" layoutX="124.0" layoutY="83.0" prefHeight="27.0" prefWidth="801.0">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <ComboBox fx:id="NumberSelector" layoutX="491.0" layoutY="188.0" onAction="#updatePosition" prefWidth="150.0" />
+      <Label fx:id="Elements" layoutX="133.0" layoutY="27.0" prefHeight="27.0" prefWidth="801.0">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Label layoutX="41.0" layoutY="27.0" text="Elements">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Separator layoutX="8.0" layoutY="236.0" prefHeight="4.0" prefWidth="1134.0" />
+      <Button layoutX="28.0" layoutY="603.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="90.0" text="Start" />
+      <Separator layoutX="269.0" layoutY="240.0" orientation="VERTICAL" prefHeight="318.0" prefWidth="6.0" />
+      <Separator layoutX="563.0" layoutY="240.0" orientation="VERTICAL" prefHeight="318.0" prefWidth="6.0" />
+      <Separator layoutX="863.0" layoutY="240.0" orientation="VERTICAL" prefHeight="318.0" prefWidth="6.0" />
+      <Label layoutX="393.0" layoutY="247.0" prefHeight="28.0" prefWidth="64.0" text="Adding">
+         <font>
+            <Font size="19.0" />
+         </font>
+      </Label>
+      <Label layoutX="686.0" layoutY="247.0" prefHeight="28.0" prefWidth="64.0" text="Coping">
+         <font>
+            <Font size="19.0" />
+         </font>
+      </Label>
+      <Label layoutX="976.0" layoutY="247.0" prefHeight="28.0" prefWidth="90.0" text="Displaying">
+         <font>
+            <Font size="19.0" />
+         </font>
+      </Label>
+      <Separator layoutX="973.0" orientation="VERTICAL" prefHeight="233.0" prefWidth="6.0" />
+      <Label layoutX="58.0" layoutY="247.0" prefHeight="28.0" prefWidth="150.0" text="Active Processes">
+         <font>
+            <Font size="19.0" />
+         </font>
+      </Label>
+      <ListView fx:id="ProcessList" layoutX="33.0" layoutY="348.0" prefHeight="200.0" prefWidth="200.0" />
+      <Label layoutX="33.0" layoutY="294.0" text="Num of Processes:" />
+      <Label layoutX="33.0" layoutY="316.0" text="Starting Position:" />
+      <Label fx:id="StartingPosition" layoutX="140.0" layoutY="316.0" text="1" />
+   </children>
+</Pane>
