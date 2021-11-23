@@ -7,6 +7,7 @@
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="666.0" prefWidth="1144.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.sh.sheduler.HelloController">
@@ -37,7 +38,7 @@
          </font>
       </Label>
       <Separator layoutX="8.0" layoutY="236.0" prefHeight="4.0" prefWidth="1134.0" />
-      <Button layoutX="28.0" layoutY="603.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="90.0" text="Start" />
+      <Button layoutX="28.0" layoutY="603.0" mnemonicParsing="false" onAction="#startSimulation" prefHeight="25.0" prefWidth="90.0" text="Start" />
       <Separator layoutX="269.0" layoutY="240.0" orientation="VERTICAL" prefHeight="318.0" prefWidth="6.0" />
       <Separator layoutX="563.0" layoutY="240.0" orientation="VERTICAL" prefHeight="318.0" prefWidth="6.0" />
       <Separator layoutX="863.0" layoutY="240.0" orientation="VERTICAL" prefHeight="318.0" prefWidth="6.0" />
@@ -66,5 +67,11 @@
       <Label layoutX="33.0" layoutY="294.0" text="Num of Processes:" />
       <Label layoutX="33.0" layoutY="316.0" text="Starting Position:" />
       <Label fx:id="StartingPosition" layoutX="140.0" layoutY="316.0" text="1" />
+      <Label fx:id="AddingResult" layoutX="283.0" layoutY="350.0" prefHeight="32.0" prefWidth="271.0" />
+      <Label fx:id="CopingResult" layoutX="583.0" layoutY="350.0" prefHeight="32.0" prefWidth="271.0" />
+      <Label fx:id="DisplayingResult" layoutX="869.0" layoutY="350.0" prefHeight="32.0" prefWidth="271.0" />
+      <Circle fx:id="AddingNotify" fill="RED" layoutX="419.0" layoutY="303.0" radius="16.0" stroke="BLACK" strokeType="INSIDE" />
+      <Circle fx:id="DisplayingNotify" fill="RED" layoutX="1021.0" layoutY="303.0" radius="16.0" stroke="BLACK" strokeType="INSIDE" />
+      <Circle fx:id="CopingNotify" fill="RED" layoutX="719.0" layoutY="303.0" radius="16.0" stroke="BLACK" strokeType="INSIDE" />
    </children>
 </Pane>
