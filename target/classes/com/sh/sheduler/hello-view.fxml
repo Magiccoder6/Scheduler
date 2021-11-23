@@ -66,12 +66,24 @@
       <ListView fx:id="ProcessList" layoutX="33.0" layoutY="396.0" prefHeight="152.0" prefWidth="200.0" />
       <Label layoutX="33.0" layoutY="294.0" text="Num of Processes:" />
       <Label layoutX="33.0" layoutY="316.0" text="Starting Position:" />
-      <Label fx:id="StartingPosition" layoutX="140.0" layoutY="316.0" text="1" />
-      <Label fx:id="AddingResult" layoutX="283.0" layoutY="350.0" prefHeight="32.0" prefWidth="271.0" />
-      <Label fx:id="CopingResult" layoutX="583.0" layoutY="350.0" prefHeight="32.0" prefWidth="271.0" />
+      <Label fx:id="StartingPosition" layoutX="140.0" layoutY="316.0" text="0" />
+      <Label fx:id="AddingResult" layoutX="284.0" layoutY="521.0" prefHeight="32.0" prefWidth="271.0" />
+      <Label fx:id="CopingResult" layoutX="575.0" layoutY="489.0" prefHeight="32.0" prefWidth="271.0" />
       <Label fx:id="DisplayingResult" layoutX="869.0" layoutY="350.0" prefHeight="32.0" prefWidth="271.0" />
       <Circle fx:id="AddingNotify" fill="RED" layoutX="419.0" layoutY="303.0" radius="16.0" stroke="BLACK" strokeType="INSIDE" />
       <Circle fx:id="DisplayingNotify" fill="RED" layoutX="1021.0" layoutY="303.0" radius="16.0" stroke="BLACK" strokeType="INSIDE" />
       <Circle fx:id="CopingNotify" fill="RED" layoutX="719.0" layoutY="303.0" radius="16.0" stroke="BLACK" strokeType="INSIDE" />
+      <Label fx:id="CPrevious" layoutX="587.0" layoutY="350.0" prefHeight="32.0" prefWidth="247.0" />
+      <Label fx:id="CUpdated" layoutX="583.0" layoutY="408.0" prefHeight="32.0" prefWidth="256.0" />
+      <Label layoutX="583.0" layoutY="325.0" text="Previous" />
+      <Label layoutX="583.0" layoutY="388.0" text="Updated" />
+      <Label layoutX="589.0" layoutY="464.0" text="Result" />
+      <Label fx:id="PIndex" layoutX="637.0" layoutY="325.0" prefHeight="17.0" prefWidth="72.0" />
+      <Label fx:id="UIndex" layoutX="637.0" layoutY="388.0" prefHeight="17.0" prefWidth="72.0" />
+      <Label fx:id="AddingNum1" layoutX="300.0" layoutY="350.0" prefHeight="32.0" prefWidth="124.0" />
+      <Label fx:id="AddingNum2" layoutX="300.0" layoutY="424.0" prefHeight="32.0" prefWidth="124.0" />
+      <Label layoutX="298.0" layoutY="325.0" prefHeight="17.0" prefWidth="104.0" text="Element Key1" />
+      <Label layoutX="284.0" layoutY="481.0" text="Result" />
+      <Label layoutX="298.0" layoutY="397.0" prefHeight="17.0" prefWidth="97.0" text="Element Key1" />
    </children>
 </Pane>

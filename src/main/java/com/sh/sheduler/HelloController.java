@@ -17,6 +17,8 @@ import javafx.util.Callback;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.Executors;
@@ -56,9 +58,22 @@ public class HelloController implements Initializable {
 
     @FXML
     private Circle AddingNotify;//notify Adding status
+    @FXML
+    private Label AddingNum1;
+
+    @FXML
+    private Label AddingNum2;
 
     @FXML
     private Circle CopingNotify;//notify Copying status
+    @FXML
+    private Label CPrevious;
+    @FXML
+    private Label CUpdated;
+    @FXML
+    private Label UIndex;
+    @FXML
+    private Label PIndex;
 
     @FXML
     private Circle DisplayingNotify;//notify Displaying status
@@ -66,7 +81,7 @@ public class HelloController implements Initializable {
 
     private Map<String,Integer> elems;//list of integer elements
     private int NumOfProcess;//Number of processes
-    private int StartPosition=1;//starting position to access elements
+    private int StartPosition=0;//starting position to access elements
     private ConcurrentLinkedQueue<OSProcess> processes;//stores all processes in a queue
     private  ObservableList<OSProcess> ActiveProcesses = FXCollections.observableArrayList();
     private LinkedList<OSProcess> Terminated =new LinkedList<OSProcess>();
@@ -75,7 +90,7 @@ public class HelloController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         //add 10 numbers to combo box
-        for(int i=1;i<11;i++){
+        for(int i=0;i<10;i++){
             NumberSelector.getItems().add(i);
         }
 
@@ -99,7 +114,7 @@ public class HelloController implements Initializable {
         int  num = (int) ProcessSelector.getValue();//get the number of processes
 
        for(int i=0;i<num;i++){
-            processes.add(new OSProcess("P"+(i+1)));//add all processes to a queue
+            processes.add(new OSProcess("P"+i));//add all processes to a queue
 
         }
 
@@ -132,7 +147,7 @@ public class HelloController implements Initializable {
     private Map<String,Integer> generateNumbers(){
         Map<String,Integer> temp = new HashMap<>();
 
-        for(int i=1;i<11;i++){
+        for(int i=0;i<10;i++){
             int nums = (int) ((Math.random() * (99 - 1)) + 1);
             temp.put("EL"+ i,nums);
 
@@ -163,31 +178,38 @@ public class HelloController implements Initializable {
         StartPosition=position;
     }
 
+    private  void resetColors(){
+        AddingNotify.setFill(Color.RED);
+        CopingNotify.setFill(Color.RED);
+        DisplayingNotify.setFill(Color.RED);
+    }
 
 
-//OS model
+
+//OSProcess model
     private  class OSProcess {
 
         private String Name;
         private int PID;
         private int TASK;
-        private int StartTime;
-        private int EndTime;
+        private String StartTime;
+        private String EndTime;
         private int Attempts;
         private String Before;
         private String After;
-        private int index1;
-        private int index2;
+        private int element1;
+        private int element2;
 
 
         public OSProcess(String Name){
             this.Name=Name;
             PID=(int) ((Math.random() * (300000 - 1)) + 1);
             Attempts=1;
-            Before=Elements.getText();
+            Before=elems.toString();
         }
 
         private void runTask(){
+           StartTime= LocalTime.now().toString();
            int tasknum = getTaskNumber();
            TASK=tasknum;
 
@@ -199,41 +221,76 @@ public class HelloController implements Initializable {
                         break;
                     case 2:
                         CopingNotify.setFill(Color.GREEN);
+                        copyingFunction(StartPosition);
                         break;
                     case 3:
+
                         DisplayingNotify.setFill(Color.GREEN);
                         break;
                 }
 
             });
 
-
+            EndTime= LocalTime.now().toString();
+            After=elems.toString();
         }
 
         private void addingFunction(int position){
-            int num1=(int) ((Math.random() * (10 - 1)) + 1);
-            int num2=(int) ((Math.random() * (10 - 1)) + 1);
+            int num1=(int) ((Math.random() * 9));
+            int num2=(int) ((Math.random() * 9));
 
             int element1 = elems.get("EL"+num1);
             int element2 = elems.get("EL"+num2);
-            index1=element1;
-            index2=element2;
+            this.element1=element1;
+            this.element2=element2;
+            AddingNum1.setText("EL"+num1);
+            AddingNum2.setText("EL"+num2);
 
             int result = element1+element2;
-            System.out.println(element1);
-            System.out.println(element2);
-            System.out.println(result);
 
+            if(position==9) {//if position equal 10 add the result to the first position
+                int el1=elems.get("EL1");
+                elems.replace("EL1",(el1+result));
+            }else{
+                int el=elems.get("EL"+(position+1));
+                elems.replace("EL"+(position+1),(result+el));
+            }
+
+            AddingResult.setText(elems.values().toString());
+
+        }
+
+        private void copyingFunction(int position){
+            int prevLocationIndex=(int) ((Math.random() * 9));
+            PIndex.setText(Integer.toString(prevLocationIndex));
+            int prevContent=elems.get("EL"+prevLocationIndex);
+            CPrevious.setText(Integer.toString(prevContent));
+
+
+            int updLocationIndex=(int) ((Math.random() * 9));
+            UIndex.setText(Integer.toString(updLocationIndex));
+            int updContent = elems.get("EL"+updLocationIndex);
+            CUpdated.setText(Integer.toString(updContent));
+            elems.replace("EL"+updLocationIndex,prevContent);
+            CopingResult.setText(elems.values().toString());
+
+            element1=elems.get("EL"+prevLocationIndex);
+            element2=elems.get("EL"+updLocationIndex);
+
+            //System.out.println(prevLocationIndex);
+            //System.out.println(prevContent);
+            //System.out.println(updLocationIndex);
+            //System.out.println(updContent);
+            //System.out.println(elems.toString());
         }
 
         //generate a random task number
         private int getTaskNumber(){
-            AddingNotify.setFill(Color.RED);
-            CopingNotify.setFill(Color.RED);
-            DisplayingNotify.setFill(Color.RED);
+            resetColors();
 
             return (int) ((Math.random() * (3 - 1)) + 1);
         }
+
     }
 
     //class to schedule all processes
