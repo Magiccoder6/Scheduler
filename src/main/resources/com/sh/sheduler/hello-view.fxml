@@ -6,6 +6,11 @@
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
@@ -38,7 +43,7 @@
          </font>
       </Label>
       <Separator layoutX="8.0" layoutY="236.0" prefHeight="4.0" prefWidth="1134.0" />
-      <Button layoutX="28.0" layoutY="603.0" mnemonicParsing="false" onAction="#startSimulation" prefHeight="25.0" prefWidth="90.0" text="Start" />
+      <Button fx:id="StartButton" layoutX="28.0" layoutY="603.0" mnemonicParsing="false" onAction="#startSimulation" prefHeight="25.0" prefWidth="90.0" text="Start" />
       <Separator layoutX="269.0" layoutY="240.0" orientation="VERTICAL" prefHeight="318.0" prefWidth="6.0" />
       <Separator layoutX="563.0" layoutY="240.0" orientation="VERTICAL" prefHeight="318.0" prefWidth="6.0" />
       <Separator layoutX="863.0" layoutY="240.0" orientation="VERTICAL" prefHeight="318.0" prefWidth="6.0" />
@@ -85,5 +90,56 @@
       <Label layoutX="298.0" layoutY="325.0" prefHeight="17.0" prefWidth="104.0" text="Element Key1" />
       <Label layoutX="284.0" layoutY="481.0" text="Result" />
       <Label layoutX="298.0" layoutY="397.0" prefHeight="17.0" prefWidth="97.0" text="Element Key1" />
+      <Button fx:id="ResetButton" layoutX="182.0" layoutY="603.0" mnemonicParsing="false" onAction="#resetSimulation" prefHeight="25.0" prefWidth="90.0" text="Reset" />
+      <Pane fx:id="ReportContainer" layoutX="221.0" layoutY="111.0" prefHeight="545.0" prefWidth="760.0" style="-fx-background-color: white;" visible="false">
+         <children>
+            <TabPane layoutX="1.0" layoutY="30.0" prefHeight="515.0" prefWidth="760.0" tabClosingPolicy="UNAVAILABLE">
+              <tabs>
+                <Tab text="Sequence Report">
+                  <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <TableView fx:id="SequenceTable" layoutX="5.0" layoutY="-2.0" prefHeight="483.0" prefWidth="675.0">
+                                <columns>
+                                  <TableColumn fx:id="Sequence1" prefWidth="75.0" text="Sequence1" />
+                                    <TableColumn fx:id="Sequence2" prefWidth="75.0" text="Sequence2" />
+                                </columns>
+                              </TableView>
+                           </children>
+                        </AnchorPane>
+                  </content>
+                </Tab>
+                <Tab text="Processes Report">
+                  <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <TableView fx:id="ProcessTable" layoutX="-1.0" layoutY="-1.0" prefHeight="485.0" prefWidth="760.0">
+                                <columns>
+                                  <TableColumn fx:id="Name" prefWidth="75.0" text="Name" />
+                                  <TableColumn fx:id="PID" prefWidth="75.0" text="PID" />
+                                    <TableColumn fx:id="Task" prefWidth="75.0" text="Task" />
+                                    <TableColumn fx:id="StartTime" prefWidth="75.0" text="StartTime" />
+                                    <TableColumn fx:id="EndTime" prefWidth="75.0" text="EndTime" />
+                                    <TableColumn fx:id="Attempts" prefWidth="75.0" text="Attempts" />
+                                    <TableColumn fx:id="Before" prefWidth="75.0" text="Before" />
+                                    <TableColumn fx:id="After" prefWidth="75.0" text="After" />
+                                    <TableColumn fx:id="El1" prefWidth="75.0" text="Element1" />
+                                    <TableColumn fx:id="El2" prefWidth="75.0" text="Element2" />
+                                </columns>
+                              </TableView>
+                           </children>
+                        </AnchorPane>
+                  </content>
+                </Tab>
+              </tabs>
+            </TabPane>
+            <Button layoutX="619.0" layoutY="2.0" mnemonicParsing="false" onAction="#CloseReport" text="Close" />
+            <Label layoutX="295.0" layoutY="-4.0" prefHeight="38.0" prefWidth="90.0" text="Report ">
+               <font>
+                  <Font size="26.0" />
+               </font>
+            </Label>
+         </children>
+      </Pane>
    </children>
 </Pane>

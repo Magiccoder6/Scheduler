@@ -10,20 +10,16 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.util.Callback;
-
-import java.io.IOException;
 import java.net.URL;
-import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+
 
 public class HelloController implements Initializable {
     @FXML
@@ -78,17 +74,60 @@ public class HelloController implements Initializable {
     @FXML
     private Circle DisplayingNotify;//notify Displaying status
 
+    @FXML
+    private Button ResetButton;//reset button
+
+    @FXML
+    private Button StartButton;//start button
+
+    //container to hold report
+    @FXML
+    private Pane ReportContainer;
+
+    //table to show sequence report
+    @FXML
+    private TableView<OSProcess> SequenceTable;
+    @FXML
+    private TableColumn<OSProcess, String> Sequence1;
+    @FXML
+    private TableColumn<OSProcess, String> Sequence2;
+
+    //process table model
+    @FXML
+    private TableView<OSProcess> ProcessTable;
+    @FXML
+    private TableColumn<OSProcess, String> EndTime;
+    @FXML
+    private TableColumn<OSProcess, String> Name;
+    @FXML
+    private TableColumn<OSProcess, Integer> PID;
+    @FXML
+    private TableColumn<OSProcess, Integer> Task;
+    @FXML
+    private TableColumn<OSProcess, String> StartTime;
+    @FXML
+    private TableColumn<OSProcess, String> After;
+    @FXML
+    private TableColumn<OSProcess, Integer> Attempts;
+    @FXML
+    private TableColumn<OSProcess, String> Before;
+    @FXML
+    private TableColumn<OSProcess, String> El1;
+    @FXML
+    private TableColumn<OSProcess, String> El2;
 
     private Map<String,Integer> elems;//list of integer elements
     private int NumOfProcess;//Number of processes
     private int StartPosition=0;//starting position to access elements
     private ConcurrentLinkedQueue<OSProcess> processes;//stores all processes in a queue
     private  ObservableList<OSProcess> ActiveProcesses = FXCollections.observableArrayList();
-    private LinkedList<OSProcess> Terminated =new LinkedList<OSProcess>();
-    private LinkedList<OSProcess> TempActiveProcs =new LinkedList<>();
+    private  ObservableList<OSProcess> Report = FXCollections.observableArrayList();
+    private LinkedList<OSProcess> TempActiveProcs;
+    private Random rn;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
         //add 10 numbers to combo box
         for(int i=0;i<10;i++){
             NumberSelector.getItems().add(i);
@@ -100,17 +139,73 @@ public class HelloController implements Initializable {
 
         saveProcesses();//save processes to data structure
 
+        //initialize report table
+        initTable();
+
     }
 
     //function to start simulation
     @FXML
     void startSimulation(ActionEvent event) {
+        disableSelectors(true);
         new ProcessScheduler().startScheduler();
     }
 
+    //function to reset simulation
+    @FXML
+    void resetSimulation(ActionEvent event) {
+        resetColors();
+        elems=generateNumbers();//save elements
+        Numbers.setText(elems.values().toString());//set elements to label
+        Elements.setText(elems.toString());//set integers to label
+
+
+        saveProcesses();//save processes to data structure
+
+        AddingNum1.setText("");
+        AddingNum2.setText("");
+        AddingResult.setText("");
+        CopingResult.setText("");
+        CPrevious.setText("");
+        CUpdated.setText("");
+        Report.clear();
+    }
+
+    //function to close the report
+    @FXML
+    void CloseReport(ActionEvent event) {
+        disableSelectors(false);
+        ReportContainer.setVisible(false);
+    }
+
+    private void initTable(){
+        //Sequence table init
+        Sequence1.setCellValueFactory(new PropertyValueFactory<>("ElementSeq1"));
+        Sequence2.setCellValueFactory(new PropertyValueFactory<>("ElementSeq2"));
+
+        //Sequence table init
+        Name.setCellValueFactory(new PropertyValueFactory<>("Name"));
+        PID.setCellValueFactory(new PropertyValueFactory<>("PID"));
+        Task.setCellValueFactory(new PropertyValueFactory<>("TASK"));
+        StartTime.setCellValueFactory(new PropertyValueFactory<>("StartTime"));
+        EndTime.setCellValueFactory(new PropertyValueFactory<>("EndTime"));
+        Attempts.setCellValueFactory(new PropertyValueFactory<>("Attempts"));
+        Before.setCellValueFactory(new PropertyValueFactory<>("Before"));
+        After.setCellValueFactory(new PropertyValueFactory<>("After"));
+        El1.setCellValueFactory(new PropertyValueFactory<>("ElementSeq1"));
+        El2.setCellValueFactory(new PropertyValueFactory<>("ElementSeq2"));
+
+    }
+
+    private void saveTableData(){
+        SequenceTable.setItems(Report);
+        ProcessTable.setItems(Report);
+    }
 
     private void saveProcesses(){
         processes= new ConcurrentLinkedQueue<>();
+        TempActiveProcs=new LinkedList<>();
+
         int  num = (int) ProcessSelector.getValue();//get the number of processes
 
        for(int i=0;i<num;i++){
@@ -148,7 +243,7 @@ public class HelloController implements Initializable {
         Map<String,Integer> temp = new HashMap<>();
 
         for(int i=0;i<10;i++){
-            int nums = (int) ((Math.random() * (99 - 1)) + 1);
+            int nums = new Random().nextInt(99);
             temp.put("EL"+ i,nums);
 
         }
@@ -159,9 +254,10 @@ public class HelloController implements Initializable {
     //called when the user select number of processes
     @FXML
     void updateProcess(MouseEvent event) {
+
         NumOfProcess = (int) ProcessSelector.getValue();
         ProcessNum.setText(Integer.toString(NumOfProcess));
-        ActiveProcesses.removeAll();
+        ActiveProcesses.clear();
         ProcessList.getItems().clear();
         saveProcesses();
     }
@@ -184,10 +280,18 @@ public class HelloController implements Initializable {
         DisplayingNotify.setFill(Color.RED);
     }
 
+    private void disableSelectors(boolean disable){
+        ProcessSelector.setDisable(disable);
+       NumberSelector.setDisable(disable);
+       StartButton.setDisable(disable);
+       ResetButton.setDisable(disable);
+    }
+
+
 
 
 //OSProcess model
-    private  class OSProcess {
+    public  class OSProcess {
 
         private String Name;
         private int PID;
@@ -199,13 +303,16 @@ public class HelloController implements Initializable {
         private String After;
         private int element1;
         private int element2;
+        private String ElementSeq1;
+        private String ElementSeq2;
 
 
         public OSProcess(String Name){
             this.Name=Name;
-            PID=(int) ((Math.random() * (300000 - 1)) + 1);
+            PID=new Random().nextInt(857777668);
             Attempts=1;
             Before=elems.toString();
+            this.ElementSeq1="";
         }
 
         private void runTask(){
@@ -214,19 +321,19 @@ public class HelloController implements Initializable {
            TASK=tasknum;
 
             Platform.runLater(() -> {
-                switch (tasknum){
-                    case 1:
+                switch (tasknum) {
+                    case 1 -> {
                         AddingNotify.setFill(Color.GREEN);
                         addingFunction(StartPosition);
-                        break;
-                    case 2:
+                    }
+                    case 2 -> {
                         CopingNotify.setFill(Color.GREEN);
                         copyingFunction(StartPosition);
-                        break;
-                    case 3:
-
+                    }
+                    case 3 ->{
                         DisplayingNotify.setFill(Color.GREEN);
-                        break;
+                        displayFunction();
+                    }
                 }
 
             });
@@ -236,8 +343,11 @@ public class HelloController implements Initializable {
         }
 
         private void addingFunction(int position){
-            int num1=(int) ((Math.random() * 9));
-            int num2=(int) ((Math.random() * 9));
+            int num1=new Random().nextInt(9);
+            int num2=new Random().nextInt(9);
+
+            ElementSeq1="EL"+num1;
+            ElementSeq2="EL"+num2;
 
             int element1 = elems.get("EL"+num1);
             int element2 = elems.get("EL"+num2);
@@ -261,13 +371,13 @@ public class HelloController implements Initializable {
         }
 
         private void copyingFunction(int position){
-            int prevLocationIndex=(int) ((Math.random() * 9));
+            int prevLocationIndex=position;
             PIndex.setText(Integer.toString(prevLocationIndex));
             int prevContent=elems.get("EL"+prevLocationIndex);
             CPrevious.setText(Integer.toString(prevContent));
 
 
-            int updLocationIndex=(int) ((Math.random() * 9));
+            int updLocationIndex=new Random().nextInt(9);
             UIndex.setText(Integer.toString(updLocationIndex));
             int updContent = elems.get("EL"+updLocationIndex);
             CUpdated.setText(Integer.toString(updContent));
@@ -277,21 +387,85 @@ public class HelloController implements Initializable {
             element1=elems.get("EL"+prevLocationIndex);
             element2=elems.get("EL"+updLocationIndex);
 
-            //System.out.println(prevLocationIndex);
-            //System.out.println(prevContent);
-            //System.out.println(updLocationIndex);
-            //System.out.println(updContent);
-            //System.out.println(elems.toString());
+            ElementSeq1="EL"+prevLocationIndex;
+            ElementSeq2="EL"+updLocationIndex;
+        }
+
+        private void displayFunction(){
+            rn = new Random();
+            int num = rn.nextInt(9);
+            DisplayingResult.setText("Element:"+num +":"+elems.get("EL"+num));
+            ElementSeq1="EL"+num;
+            ElementSeq2="EL"+num;
         }
 
         //generate a random task number
         private int getTaskNumber(){
             resetColors();
-
-            return (int) ((Math.random() * (3 - 1)) + 1);
+            rn = new Random();
+            int num = rn.nextInt(3 - 1 + 1)+1;
+            if(num==0)
+                num=3;
+            return num;
         }
 
+    public String getName() {
+        return Name;
     }
+
+    public int getPID() {
+        return PID;
+    }
+
+    public int getTASK() {
+        return TASK;
+    }
+
+    public String getStartTime() {
+        return StartTime;
+    }
+
+
+    public String getEndTime() {
+        return EndTime;
+    }
+
+
+    public int getAttempts() {
+        return Attempts;
+    }
+
+
+    public String getBefore() {
+        return Before;
+    }
+
+
+    public String getAfter() {
+        return After;
+    }
+
+
+    public int getElement1() {
+        return element1;
+    }
+
+
+    public int getElement2() {
+        return element2;
+    }
+
+
+    public String getElementSeq1() {
+        return ElementSeq1;
+    }
+
+
+    public String getElementSeq2() {
+        return ElementSeq2;
+    }
+
+}
 
     //class to schedule all processes
     private class ProcessScheduler {
@@ -301,11 +475,11 @@ public class HelloController implements Initializable {
         }
 
         public void startScheduler(){
-            Task<Void> threadTask = new Task<Void>() {
+            Task<Void> threadTask = new Task<>() {
                 @Override
                 protected Void call() throws Exception {
                     OSProcess temp = TempActiveProcs.poll();
-                    if(temp==null || processes==null){
+                    if (temp == null || processes == null) {
                         ActiveProcesses.clear();
                         return null;
                     }
@@ -315,7 +489,7 @@ public class HelloController implements Initializable {
                     OSProcess newProc = processes.poll();//get the next process
 
                     Platform.runLater(() -> {
-                        Terminated.add(temp);
+                        Report.add(temp);
                         ActiveProcesses.remove(temp);//remove from active processes
                         ActiveProcesses.add(newProc);//add new process to active processes
                         TempActiveProcs.add(newProc);//add new process to temporary active process list
@@ -327,48 +501,19 @@ public class HelloController implements Initializable {
                 }
             };
 
-            threadTask.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
-                @Override
-                public void handle(WorkerStateEvent event) {
+            threadTask.setOnSucceeded(event -> {
 
-                    if(!ActiveProcesses.isEmpty()){
-                        startScheduler();
+                if(!ActiveProcesses.isEmpty()){
+                    startScheduler();
 
-                    }
-
+                }else {
+                    saveTableData();//add process data to table
+                    ReportContainer.setVisible(true);
                 }
+
             });
             new Thread(threadTask).start();
         }
 
-        /*@Override
-        public void run() {
-            try {
-
-                while(true){
-                    OSProcess temp = TempActiveProcs.poll();
-                    if(temp==null || processes==null)
-                        break;
-
-                        temp.runTask();
-                        OSProcess newProc = processes.poll();
-
-                        Platform.runLater(() -> {
-
-                            ActiveProcesses.remove(temp);
-                            ActiveProcesses.add(newProc);
-                            TempActiveProcs.add(newProc);
-
-                        });
-
-                     Thread.sleep(2000);
-
-
-                }
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-        }*/
     }
 }
